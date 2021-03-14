@@ -1,5 +1,10 @@
 const User = require('./schemas/user')
 
+async function createUser(body) {
+  const user = await User.create(body)
+  return user
+}
+
 async function findByEmail(email) {
   const user = await User.findOne({ email })
 
@@ -11,13 +16,12 @@ async function findById(id) {
   return user
 }
 
-async function createUser({ email, password }) {
-  const user = new User({ email, password })
-  return user.save()
-}
-
 async function updateToken(id, token) {
   return await User.updateOne({ _id: id }, { token })
+}
+
+async function updateSubscription(id, subscription) {
+  return await User.updateOne({ _id: id }, { subscription })
 }
 
 module.exports = {
@@ -25,5 +29,6 @@ module.exports = {
   findById,
   createUser,
   updateToken,
+  updateSubscription,
 
 }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema, model, SchemaTypes } = mongoose
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 const contactSchema = new Schema(
   {
@@ -16,7 +17,7 @@ const contactSchema = new Schema(
       unique: true,
     },
     phone: {
-      type: String,
+      type: Number,
       required: [true, 'Set phone number for your contact'],
       unique: true,
     },
@@ -40,6 +41,8 @@ const contactSchema = new Schema(
 
   { versionKey: false, timestamps: true }
 )
+
+contactSchema.plugin(mongoosePaginate)
 
 const Contact = model('contact', contactSchema)
 

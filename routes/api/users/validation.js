@@ -1,27 +1,20 @@
 const Joi = require('joi')
+const { HttpCode, Subscription } = require('../../../helpers/constants')
 
-const schemaCreateContact = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email().min(3).max(30).required(),
-  phone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
+const schemaCreateUser = Joi.object({
+  email: Joi.string()
+    .email()
+    .pattern(/\S+@\S+\.\S+/)
     .required(),
-  subscription: Joi.string().optional(),
-  password: Joi.string().optional(),
-  token: Joi.string().optional(),
+  password: Joi.string().required(),
 })
 
-const schemaUpdateContact = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).optional(),
-  email: Joi.string().email().min(3).max(30).optional(),
-  phone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
-    .optional(),
-  subscription: Joi.string().optional(),
-  password: Joi.string().optional(),
-  token: Joi.string().optional(),
+const schemaUpdateSubscription = Joi.object({
+  subscription: Joi.string().valid(
+    Subscription.FREE,
+    Subscription.PREMIUM,
+    Subscription.PRO,
+  ),
 })
 
 const validate = (schema, obj, next) => {
@@ -29,17 +22,17 @@ const validate = (schema, obj, next) => {
   if (error) {
     const [{ message }] = error.details
     return next({
-      status: 400,
-      message: `Filed: ${message.replace(/'/g, '')}`,
+      status: HttpCode.BAD_REQUEST,
+      message: `Field ${message.replace(/"/g, '')}`,
     })
   }
   next()
 }
 
-module.exports.createContact = (req, res, next) => {
-  return validate(schemaCreateContact, req.body, next)
+module.exports.createUser = (req, _res, next) => {
+  return validate(schemaCreateUser, req.body, next)
 }
 
-module.exports.updateContact = (req, res, next) => {
-  return validate(schemaUpdateContact, req.body, next)
+module.exports.updateSubscription = (req, _res, next) => {
+  return validate(schemaUpdateSubscription, req.body, next)
 }
