@@ -28,6 +28,7 @@ const getContactById = async (id, userId) => {
     path: 'owner',
     select: 'name email -_id',
   })
+
   return result
 }
 
@@ -56,6 +57,7 @@ const removeContact = async (id, userId) => {
     path: 'owner',
     select: 'email -_id',
   })
+
   return result
 }
 

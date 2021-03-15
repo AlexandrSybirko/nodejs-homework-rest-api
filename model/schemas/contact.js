@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+
 const { Schema, model, SchemaTypes } = mongoose
 const mongoosePaginate = require('mongoose-paginate-v2')
 
@@ -17,7 +18,9 @@ const contactSchema = new Schema(
       unique: true,
     },
     phone: {
+
       type: Number,
+
       required: [true, 'Set phone number for your contact'],
       unique: true,
     },
@@ -33,6 +36,7 @@ const contactSchema = new Schema(
       type: String,
       default: '',
     },
+
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
