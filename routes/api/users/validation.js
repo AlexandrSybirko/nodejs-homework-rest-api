@@ -36,3 +36,15 @@ module.exports.createUser = (req, _res, next) => {
 module.exports.updateSubscription = (req, _res, next) => {
   return validate(schemaUpdateSubscription, req.body, next)
 }
+
+module.exports.updateAvatar = (req, res, next) => {
+  if (!req.file) {
+    return res.status(HttpCode.BAD_REQUEST).json({
+      status: 'error',
+      code: HttpCode.BAD_REQUEST,
+      data: 'Bad request',
+      message: 'File not found',
+    })
+  }
+  next()
+}

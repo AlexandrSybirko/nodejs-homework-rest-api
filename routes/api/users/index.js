@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const guard = require('../../../helpers/guard')
+const upload = require('../../../helpers/upload')
 const validate = require('./validation')
 
 const userController = require('../../../controllers/users')
@@ -14,6 +15,11 @@ router.patch(
   guard,
   validate.updateSubscription,
   userController.updateSubscription,
+)
+router.patch(
+  '/avatars',
+  [guard, upload.single('avatar'), validate.updateAvatar],
+  userController.avatars
 )
 
 module.exports = router

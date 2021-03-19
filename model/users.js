@@ -24,11 +24,16 @@ async function updateSubscription(id, subscription) {
   return await User.updateOne({ _id: id }, { subscription })
 }
 
+async function updateAvatar(id, avatar) {
+  return await User.updateOne({ _id: id }, { avatar })
+}
+
 module.exports = {
   findByEmail,
   findById,
   createUser,
   updateToken,
   updateSubscription,
+  updateAvatar,
 
 }
