@@ -17,7 +17,9 @@ async function findById(id) {
 }
 
 async function findByVerifyToken(verifyToken) {
+  console.log('verifyToken', verifyToken)
   const user = await User.findOne({ verifyToken })
+   console.log('user', user)
   return user
 }
 

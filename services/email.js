@@ -3,9 +3,17 @@ const sgMail = require('@sendgrid/mail')
 const config = require('../config/email.json')
 require('dotenv').config()
 
+// const nodemailer = require('nodemailer')
+
+const {
+  SENDER,
+  SENDER_PASSWORD
+} = process.env
+
 class EmailService {
 
-#sender = sgMail
+  #sender = sgMail
+  // #sender = nodemailer
 #GenerateTemplate = Mailgen
     constructor(env) {
         switch (env) {
@@ -62,6 +70,28 @@ class EmailService {
     await this.#sender.send(msg);
   }
     }
+
+//   async sendEmail(verifyToken, email, name) {
+//     const emailBody = this.#createTemplate(verifyToken, name)
+
+//     const transporter = this.#sender.createTransport({
+//       host: 'smtp.meta.ua',
+//       port: 465,
+//       secure: true, // true for 465, false for other ports
+//       auth: {
+//         user: SENDER, // generated ethereal user
+//         pass: SENDER_PASSWORD, // generated ethereal password
+//       },
+//     })
+
+//     await transporter.sendMail({
+//       from: SENDER, 
+//       to: email, 
+//       subject: 'Contacts: account verification', 
+//       html: emailBody, 
+//     })
+//  }
+// }
  
 
 

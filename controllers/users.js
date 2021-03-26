@@ -158,8 +158,10 @@ const saveAvatarToStatic = async (req) => {
 }
 
 const verify = async (req, res, next) => {
+ 
   try {
     const user = await Users.findByVerifyToken(req.params.token)
+   
     if (user) {
       await Users.updateVerifyToken(user._id, true, null);
 
