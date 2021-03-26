@@ -4,13 +4,15 @@ const path = require('path')
 const Jimp = require('jimp')
 const Users = require('../model/users')
 require('dotenv').config()
+const { nanoid } = require('nanoid')
 const { HttpCode } = require('../helpers/constants')
+const EmailService = require('../services/email')
 const createFolderIsExist = require('../helpers/create-dir')
 const SECRET_KEY = process.env.JWT_SECRET
 
 const reg = async (req, res, next) => {
   try {
-    const { email } = req.body
+    const { email, name } = req.body
     const user = await Users.findByEmail(email)
 
     if (user) {
@@ -21,8 +23,14 @@ const reg = async (req, res, next) => {
         message: 'Email in use',
       })
     }
-
-    const newUser = await Users.createUser(req.body)
+    const verifyToken = nanoid()
+    const emailService = new EmailService(process.env.NODE_ENV)
+    await emailService.sendEmail(verifyToken, email, name)
+    const newUser = await Users.createUser({
+      ...req.body,
+      verify: false,
+      verifyToken,
+    })
 
     return res.status(HttpCode.CREATED).json({
       status: 'success',
@@ -151,7 +159,7 @@ const saveAvatarToStatic = async (req) => {
 
 const verify = async (req, res, next) => {
   try {
-    const user = Users.findByVerifyToken(req.params.token)
+    const user = await Users.findByVerifyToken(req.params.token)
     if (user) {
       await Users.updateVerifyToken(user._id, true, null);
 
